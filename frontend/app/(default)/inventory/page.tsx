@@ -85,7 +85,7 @@ export default function FeaturesBlocks() {
         <div className="py-12 md:py-20">
           {/* Section header */}
           <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
-            <h2 className="h2 mb-4">Claim Your NFTs</h2>
+            <h2 className="h2 mb-4">Inventory</h2>
             <p className="text-xl text-gray-600">
               See all the NFTs minted by you below. You can claim these by hitting the claim button and entering your wallet address.
             </p>

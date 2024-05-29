@@ -131,7 +131,7 @@ export default function FeaturesBlocks() {
         <div className="py-12 md:py-20">
           {/* Section header */}
           <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
-            <h2 className="h2 mb-4">Test Our Project</h2>
+            <h2 className="h2 mb-4">Mint your assets</h2>
             <p className="text-xl text-gray-600">
               Since our Alexa skill is still not published, You can test our
               service using this demo form. Just Enter prompt and select image
@@ -151,8 +151,8 @@ export default function FeaturesBlocks() {
                 label="Type"
                 onChange={handleChange}
               >
-                <MenuItem value={"ai"}>AI</MenuItem>
-                <MenuItem value={"tweet"}>Tweet-like</MenuItem>
+                <MenuItem value={"ai"}>Meshy Models</MenuItem>
+                <MenuItem value={"tweet"}>DALL-E Images</MenuItem>
               </Select>
             </FormControl>
 

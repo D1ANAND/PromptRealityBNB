@@ -44,7 +44,7 @@ export default function Features() {
             {/* Content */}
             <div className="max-w-xl md:max-w-none md:w-full mx-auto md:col-span-7 lg:col-span-6 md:mt-6" data-aos="fade-right">
               <div className="md:pr-4 lg:pr-12 xl:pr-16 mb-8">
-                <h3 className="h3 mb-3">Steps to use Mint MyWords</h3>
+                <h3 className="h3 mb-3">Steps to use Mint MRAssets</h3>
                 <p className="text-xl text-gray-600">Follow these step-by-step guide to use out product.</p>
               </div>
               {/* Tabs buttons */}
@@ -55,7 +55,7 @@ export default function Features() {
                   onClick={(e) => { e.preventDefault(); setTab(1); }}
                 >
                   <div>
-                    <div className="font-bold leading-snug tracking-tight mb-1">Give Alexa Commands</div>
+                    <div className="font-bold leading-snug tracking-tight mb-1">Generate AI Models</div>
                     <div className="text-gray-600">Just say "Alexa, open Mint MyWords". Alexa will take details of the NFT you want to mint.</div>
                   </div>
                   <div className="flex justify-center items-center w-8 h-8 bg-white rounded-full shadow flex-shrink-0 ml-3">
@@ -70,7 +70,7 @@ export default function Features() {
                   onClick={(e) => { e.preventDefault(); setTab(2); }}
                 >
                   <div>
-                    <div className="font-bold leading-snug tracking-tight mb-1">Check your mailbox</div>
+                    <div className="font-bold leading-snug tracking-tight mb-1">Render in Reality</div>
                     <div className="text-gray-600">We Will mint the NFT to your Gmail account linked with Alexa. You can  go to claim from from there.</div>
                   </div>
                   <div className="flex justify-center items-center w-8 h-8 bg-white rounded-full shadow flex-shrink-0 ml-3">
@@ -85,7 +85,7 @@ export default function Features() {
                   onClick={(e) => { e.preventDefault(); setTab(3); }}
                 >
                   <div>
-                    <div className="font-bold leading-snug tracking-tight mb-1">Claim NFTs to your wallet</div>
+                    <div className="font-bold leading-snug tracking-tight mb-1">Sell on Marketplace</div>
                     <div className="text-gray-600">Get Your NFT Now! Easy Claim Process - Click, Enter Wallet Address, and Receive Directly.</div>
                   </div>
                   <div className="flex justify-center items-center w-8 h-8 bg-white rounded-full shadow flex-shrink-0 ml-3">
