@@ -2,27 +2,36 @@
 This repo contains: 
 <br />
 
-###### Alexa Skill
-Using this skill, speak to your alexa by saying "Hey Alexa, mint my words" followed by a prompt and choose the image type (AI-generated or tweet-like). This will mint the prompt generated image on the blockchain and send a mail to Alexa linked email account containing image and transaction hash <br />
-
 ######  Frontend 
-Demo frontend to test the API calls made in Alexa Skill and claim the NFTs minted by the user to their personal wallets <br/>
+Web-app to generate new assets through user prompt and mint or trade them for your virtual world <br/>
+
+###### Unity
+A Mixed Reality environment to interact with your on-chain assets
+
+###### Smart Contract Methods
+Contains following methods:
+mintAsset - mints a newly generated asset on-chain <br/>
+sell - selling assets on marketplace <br/>
+buy - buying assets on marketplace <br/>
+fetchAllAssets - fetches all the assets on the platform <br/>
+fetchInventory - fetches user's inventory <br/>
 
 ###### API Methods
 Following methods are available on the API:
 <br /><br />
-mintBannerSimulator - mints tweet-like images <br/>
-mintAiSimulator - mints AI images <br/>
-claimNftSimulator - claims NFT to user wallet <br/>
-fetchNftImage - fetches all user-minted NFTs <br/>
+create - creates user record with his email <br/>
+update - adds asset to user record <br/>
+setMain - sets an asset's uri as a primary asset to interact in reality <br/>
+fetchMain - fetches main asset in reality <br/>
+view - fetches all user's assets <br/>
 
 <br />
 <br />
 
 
-[Deployed Site](https://mint-mywords.vercel.app/)
+[Deployed Site]()
 <br />
-[Demo Video](https://youtu.be/K3XUWz05Yn0)
+[Demo Video]()
 <br />
-[Pitch deck](https://tome.app/meow-b1b/mint-mywords-clkokahzo03fkn05qbso0yetu)
+[Pitch deck]()
 
