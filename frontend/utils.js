@@ -38,6 +38,27 @@ export async function createAsset(email, _tokenUri) {
     console.log("Asset minted");
 }
 
+export async function sellAsset(_tokenId, _price) {
+    const contract = await getContract(true);
+    const weiPrice = ethers.utils.parseUnits(_price.toString(), "ether");
+    const tx = await contract.sell(_tokenId, weiPrice);
+    await tx.wait();
+    console.log("Asset minted");
+}
+
+export async function buyAsset(_tokenId, _price) {
+    const contract = await getContract(true);
+    const weiPrice = ethers.utils.parseUnits(_price.toString(), "ether");
+    const tx = await contract.buy({
+        value: weiPrice,
+        gasLimit: 1000000
+    });
+    await tx.wait();
+    fetchAllAssets();
+    console.log("Asset minted");
+}
+
+
 // --------Read
 
 let allAssets = [];
@@ -69,9 +90,20 @@ async function fetchAllAssets() {
     return items;
 }
 
+export async function fetchMarketplacePage() {
+    if (allAssets.length > 0) {
+      const filteredArray = allModels.filter((subarray) => subarray.isSelling == "true");
+      return filteredArray;
+    } else {
+      const data = await fetchAllAssets();
+      const filteredArray = data.filter(subarray => subarray.isSelling == "true");
+      return filteredArray;
+    }
+  }
+
 let myAssets = [];
 
-async function fetchInventoryAssets() {
+export async function fetchInventoryAssets() {
     const address = await getUserAddress()
 
     const contract = await getContract(true);
@@ -102,7 +134,7 @@ async function fetchInventoryAssets() {
 
 // --------APICall
 
-async function callCreate(_email) {
+export async function callCreate(_email) {
     const apiUrl = `https://mixed-reality-apis-zvglklnxya-em.a.run.app/create`
     const payload = {
         email: _email
@@ -111,7 +143,7 @@ async function callCreate(_email) {
     console.log(response)
 }
 
-async function callUpdate(_email, _assetUrl) {
+export async function callUpdate(_email, _assetUrl) {
     const apiUrl = `https://mixed-reality-apis-zvglklnxya-em.a.run.app/update`
     const payload = {
         email: _email,
@@ -121,7 +153,7 @@ async function callUpdate(_email, _assetUrl) {
     console.log(response)
 }
 
-async function callSetMain(_email, _main_url) {
+export async function callSetMain(_email, _main_url) {
     const apiUrl = `https://mixed-reality-apis-zvglklnxya-em.a.run.app/set`
     const payload = {
         email: _email,
@@ -131,7 +163,7 @@ async function callSetMain(_email, _main_url) {
     console.log(response)
 }
 
-async function callFetchMain(_email) {
+export async function callFetchMain(_email) {
     const apiUrl = `https://mixed-reality-apis-zvglklnxya-em.a.run.app/fetchMain`
     const payload = {
         email: _email

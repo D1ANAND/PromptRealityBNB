@@ -44,6 +44,9 @@ export default function Header() {
           {/* Desktop navigation */}
           <nav className="hidden md:flex md:grow">
             {/* Desktop sign in links */}
+            <div>
+              Wallet
+            </div>
             <div className="flex grow justify-end flex-wrap items-center">
               <SignedIn>
                 <UserButton afterSignOutUrl="/" />

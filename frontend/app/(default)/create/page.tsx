@@ -8,8 +8,9 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import toast, { Toaster } from "react-hot-toast";
+import { createAsset, callCreate } from "../../../utils"
 
-const BASE_URL = "https://mint-my-words.onrender.com/users/";
+// const BASE_URL = "https://mint-my-words.onrender.com/users/";
 
 export default function FeaturesBlocks() {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -34,18 +35,18 @@ export default function FeaturesBlocks() {
         toast.error("You are not logged in. Login to continue");
         return false
     }
-    if (!user?.fullName){
-        toast.error("Your Name is not given in your Gmail.");
-        return false
-    }
+    // if (!user?.fullName){
+    //     toast.error("Your Name is not given in your Gmail.");
+    //     return false
+    // }
 
-    const profileName = user.fullName
+    // const profileName = user.fullName
     const profileEmail = user?.primaryEmailAddress?.emailAddress
 
     try {
       setLoading(true)
       
-      await mintNFTSimulator(profileName, profileEmail, imagePrompt, imagetype);
+      await mintNFTSimulator(profileEmail, imagePrompt, imagetype);
       setLoading(false)
       toast.success("success! You will receive NFT on yoru mail within a minute");
     } catch (error: any) {
@@ -56,68 +57,73 @@ export default function FeaturesBlocks() {
   }
 
   
-  async function mintNFTSimulator(name: string, email: string, prompt: string, type: string) {
+  async function mintNFTSimulator(email: string, prompt: string, type: string) {
     try {
-      const user = await checkUserExistence(name, email);
+      const user = await checkUserExistence(email);
       console.log("user", user)
       if (type === "ai"){
-        const nft = await mintAINft(email, prompt);
-        console.log("minted ai nft", nft);
+        const res = await generationMeshyAsset(email, prompt);
+        console.log("minted 3d asset: ", res);
       }
       else{
-        const nft = await mintBannerNFT(email, prompt);
-        console.log("minted banner nft", nft);
+        const res = await generationDalleAsset(email, prompt);
+        console.log("minted 2d asset: ", res);
       }
     } catch (error) {
       throw error;
     }
   }
   
-  async function checkUserExistence(name: string, email: string) {
+  async function checkUserExistence( email: string) {
     try {
-      const response = await axios.get(BASE_URL + email);
-      return response.data;
+      const res = await callCreate(email);
+      return res;
     } catch (error: any) {
       if (error.response && error.response.status === 404) {
-        return createUser(name, email);
+        // return createUser(name, email);
       } else {
         throw error;
       }
     }
   }
-  async function createUser(name: string, email: string) {
+
+  // async function createUser(name: string, email: string) {
+  //   try {
+  //     let obj = {
+  //       name,
+  //       email,
+  //     };
+  //     const response = await axios.post(BASE_URL + "create", obj);
+  //     return response.data;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+
+  async function generationMeshyAsset(email: string, prompt: string) {
     try {
-      let obj = {
-        name,
-        email,
-      };
-      const response = await axios.post(BASE_URL + "create", obj);
-      return response.data;
+      const generation: string = `hey test ${prompt}`;
+      const res = await mintAsset(email, generation)
+      return res;
+    } catch (error) {
+      throw error;
+    }
+  }
+  
+  async function generationDalleAsset(email: string, prompt: string) {
+    try {
+      const generation: string = `hey test ${prompt}`;
+      const res = await mintAsset(email, generation)
+      return res;
     } catch (error) {
       throw error;
     }
   }
 
-  async function mintAINft(email: string, prompt: string) {
+  async function mintAsset(email: string, generation: string) {
     try {
-      let obj = {
-        prompt,
-      };
-  
-      const response = await axios.post(BASE_URL + email + "/create/ai", obj);
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  }
-  async function mintBannerNFT(email: string, prompt: string) {
-    try {
-      let obj = {
-        prompt,
-      };
-  
-      const response = await axios.post(BASE_URL + email + "/create/banner", obj);
-      return response.data;
+      const res = await createAsset(email, generation)
+      return res;
     } catch (error) {
       throw error;
     }
@@ -151,8 +157,8 @@ export default function FeaturesBlocks() {
                 label="Type"
                 onChange={handleChange}
               >
-                <MenuItem value={"ai"}>Meshy Models</MenuItem>
-                <MenuItem value={"tweet"}>DALL-E Images</MenuItem>
+                <MenuItem value={"ai"}>Meshy Models (3D)</MenuItem>
+                <MenuItem value={"tweet"}>DALL-E Images (2D)</MenuItem>
               </Select>
             </FormControl>
 
