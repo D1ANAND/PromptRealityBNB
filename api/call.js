@@ -38,6 +38,15 @@ async function callFetchMain(_email) {
     console.log(response)
 }
 
+async function callViewAssets(_email) {
+    const apiUrl = `https://mixed-reality-apis-zvglklnxya-em.a.run.app/view`
+    const payload = {
+        email: _email
+    }
+    const response = await axios.post(apiUrl, payload);
+    console.log(response)
+}
+
 async function main() {
     let email = "a@gmail.com"
     let asset_url = "haha.com"
@@ -46,7 +55,7 @@ async function main() {
     // callCreate(email)
     // callUpdate(email, asset_url2)
     // callSetMain(email, asset_url2)
-    callFetchMain(email)
+    // callViewAssets(email)
 }
 
 main()
