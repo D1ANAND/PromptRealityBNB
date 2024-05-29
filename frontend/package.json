@@ -18,11 +18,13 @@
     "@types/react-dom": "^18.2.4",
     "aos": "^3.0.0-beta.6",
     "axios": "^1.4.0",
+    "ethers": "^6.12.1",
     "next": "^13.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.1",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "web3modal": "^1.9.12"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",
