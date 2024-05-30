@@ -86,7 +86,7 @@ async function fetchAllAssets() {
     );
   
     allAssets = items;
-    console.log("All Models fetched: ", items);
+    console.log("All Assets fetched: ", items);
     return items;
 }
 
@@ -128,7 +128,7 @@ export async function fetchInventoryAssets() {
     );
   
     myAssets = items;
-    console.log("All Models fetched: ", items);
+    console.log("Inventory assets fetched: ", items);
     return items;
 }
 
@@ -140,7 +140,7 @@ export async function callCreate(_email) {
         email: _email
     }
     const response = await axios.post(apiUrl, payload);
-    console.log(response)
+    console.log(response.data)
 }
 
 export async function callUpdate(_email, _assetUrl) {
@@ -150,7 +150,7 @@ export async function callUpdate(_email, _assetUrl) {
         asset_url: _assetUrl
     }
     const response = await axios.post(apiUrl, payload);
-    console.log(response)
+    console.log(response.data)
 }
 
 export async function callSetMain(_email, _main_url) {
@@ -160,7 +160,7 @@ export async function callSetMain(_email, _main_url) {
         main_url: _main_url
     }
     const response = await axios.post(apiUrl, payload);
-    console.log(response)
+    console.log(response.data)
 }
 
 export async function callFetchMain(_email) {
@@ -169,5 +169,5 @@ export async function callFetchMain(_email) {
         email: _email
     }
     const response = await axios.post(apiUrl, payload);
-    console.log(response)
+    console.log(response.data)
 }

@@ -13,6 +13,7 @@ import {
   SignedOut,
   SignUpButton,
 } from "@clerk/nextjs";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export default function Header() {
   const [top, setTop] = useState<boolean>(true);
@@ -44,10 +45,11 @@ export default function Header() {
           {/* Desktop navigation */}
           <nav className="hidden md:flex md:grow">
             {/* Desktop sign in links */}
+
+            <div className="flex grow justify-end flex-wrap items-center gap-4">
             <div>
-              Wallet
+            <ConnectButton accountStatus="address" chainStatus="icon" showBalance={false}/>
             </div>
-            <div className="flex grow justify-end flex-wrap items-center">
               <SignedIn>
                 <UserButton afterSignOutUrl="/" />
               </SignedIn>
