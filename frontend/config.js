@@ -1,4 +1,4 @@
-export const addressContract =  `0x18FF6d1c1A8Fd60F9De80945c6E562ed17Db9D27`
+export const addressContract =  `0xAc943bC26521e297A0A6193738693f4Ee9Dc33FA`
 
 export const abi = `[
 	{
@@ -345,9 +345,14 @@ export const abi = `[
 						"internalType": "string",
 						"name": "_uri",
 						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_promptHash",
+						"type": "string"
 					}
 				],
-				"internalType": "struct Marketplace.Asset[]",
+				"internalType": "struct PromptReality.Asset[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -396,9 +401,14 @@ export const abi = `[
 						"internalType": "string",
 						"name": "_uri",
 						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_promptHash",
+						"type": "string"
 					}
 				],
-				"internalType": "struct Marketplace.Asset[]",
+				"internalType": "struct PromptReality.Asset[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -447,6 +457,55 @@ export const abi = `[
 	{
 		"inputs": [
 			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "idToAsset",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "tokenId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address payable",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address payable",
+				"name": "creator",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "isSelling",
+				"type": "bool"
+			},
+			{
+				"internalType": "string",
+				"name": "_uri",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_promptHash",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "address",
 				"name": "owner",
 				"type": "address"
@@ -478,6 +537,11 @@ export const abi = `[
 			{
 				"internalType": "string",
 				"name": "_tokenURI",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_promptHash",
 				"type": "string"
 			}
 		],
@@ -627,6 +691,19 @@ export const abi = `[
 	{
 		"inputs": [
 			{
+				"internalType": "uint256",
+				"name": "_tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "setMain",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "bytes4",
 				"name": "interfaceId",
 				"type": "bytes4"
@@ -709,6 +786,25 @@ export const abi = `[
 		"name": "transferFrom",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "userToMain",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	}
 ]`

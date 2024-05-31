@@ -3,9 +3,9 @@
 import { useState, useRef, useEffect } from 'react'
 import { Transition } from '@headlessui/react'
 import Image from 'next/image'
-import Gmailimage from '@/public/images/gmail.png'
-import AlexaDemoImage from '@/public/images/alexa-demo.png'
-import ClaimImage from '@/public/images/claim-nft.png'
+import AlexaDemoImage from '@/public/images/feature1.png'
+import ClaimImage from '@/public/images/feature2.png'
+import Gmailimage from '@/public/images/feature3.png'
 
 export default function Features() {
   
@@ -35,7 +35,7 @@ export default function Features() {
           <div className="max-w-3xl mx-auto text-center pb-12 md:pb-16">
             <h1 className="h2 mb-4">How this works?</h1>
             <p className="text-xl text-gray-600">
-            Start the Alexa skill by saying “Hey Alexa, Mint my words”. Additionally, Claim these NFTs to your Solana Wallet from our website!</p>
+            Generate your AI assets through prompting on this interface and login to the app with this same email to render them mixed reality!</p>
           </div>
 
           {/* Section content */}
@@ -56,7 +56,7 @@ export default function Features() {
                 >
                   <div>
                     <div className="font-bold leading-snug tracking-tight mb-1">Generate AI Models</div>
-                    <div className="text-gray-600">Just say "Alexa, open Mint MyWords". Alexa will take details of the NFT you want to mint.</div>
+                    <div className="text-gray-600">Go to the create page to generate your asset through prompting.</div>
                   </div>
                   <div className="flex justify-center items-center w-8 h-8 bg-white rounded-full shadow flex-shrink-0 ml-3">
                     <svg className="w-3 h-3 fill-current" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
@@ -71,7 +71,7 @@ export default function Features() {
                 >
                   <div>
                     <div className="font-bold leading-snug tracking-tight mb-1">Render in Reality</div>
-                    <div className="text-gray-600">We Will mint the NFT to your Gmail account linked with Alexa. You can  go to claim from from there.</div>
+                    <div className="text-gray-600">Login with the same email as here in your PromptR app.</div>
                   </div>
                   <div className="flex justify-center items-center w-8 h-8 bg-white rounded-full shadow flex-shrink-0 ml-3">
                     <svg className="w-3 h-3 fill-current" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">
@@ -85,8 +85,8 @@ export default function Features() {
                   onClick={(e) => { e.preventDefault(); setTab(3); }}
                 >
                   <div>
-                    <div className="font-bold leading-snug tracking-tight mb-1">Sell on Marketplace</div>
-                    <div className="text-gray-600">Get Your NFT Now! Easy Claim Process - Click, Enter Wallet Address, and Receive Directly.</div>
+                    <div className="font-bold leading-snug tracking-tight mb-1">Trade on Marketplace</div>
+                    <div className="text-gray-600">Sell or Buy prompt generated assets on the marketplace.</div>
                   </div>
                   <div className="flex justify-center items-center w-8 h-8 bg-white rounded-full shadow flex-shrink-0 ml-3">
                     <svg className="w-3 h-3 fill-current" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg">

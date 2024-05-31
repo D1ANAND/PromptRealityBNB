@@ -9,35 +9,28 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import toast, { Toaster } from "react-hot-toast";
-import { fetchInventoryAssets } from "../../../utils"
+import { fetchInventoryAssets, sellAsset, setMain, callSyncPin } from "../../../utils";
 
 export default function FeaturesBlocks() {
     const [nftData, setNftData] = useState<any[]>([]);
     const { isLoaded, isSignedIn, user } = useUser();
 
-    const [address, setAddress] = useState("");
-
     const [open, setOpen] = useState(false);
-    const [nftAddress, setNftAddres] = useState("");
 
-    function setNft(address: string) {
-        setNftAddres(address);
-        setOpen(true);
-    }
-
-    const handleClose = () => {
-        setOpen(false);
-    };
+    const [nftId, setNftId] = useState("");
+    const [price, setPrice] = useState("");
+    const [email, setEmail] = useState("");
 
     useEffect(() => {
-        async function fetchInventory(email: string) {
-          const data: any[] = await fetchInventoryAssets()
-          return data;
+        async function fetchInventory() {
+            const data: any[] = await fetchInventoryAssets();
+            return data;
         }
 
         if (user?.primaryEmailAddress?.emailAddress) {
-          fetchInventory(user.primaryEmailAddress?.emailAddress).then((data) =>
-                setNftData(data)
+            setEmail(user.primaryEmailAddress?.emailAddress)
+            fetchInventory().then(
+                (data) => setNftData(data)
             );
         } else {
             if (isLoaded)
@@ -45,39 +38,21 @@ export default function FeaturesBlocks() {
         }
     }, [user?.emailAddresses]);
 
-    async function handelClaim() {
-        handleClose();
-        if (!user?.primaryEmailAddress?.emailAddress) {
-            toast.error("You are not logged in. Login to continue");
-            return false;
-        }
-
-        if (!address) {
-            toast.error("Enter receiver Address");
-            return false;
-        }
-        if (!nftAddress) {
-            toast.error("NFT address not found");
-            return false;
-        }
-
-        try {
-            const response = await axios.patch(
-                "https://mint-my-words.onrender.com/users/" +
-                    user?.primaryEmailAddress?.emailAddress +
-                    "/nft/claimed/" +
-                    nftAddress,
-                { receiverAddress: address }
-            );
-            console.log(response);
-
-            toast.success("Successfullt minted NFT in your Solana Account.");
-        } catch (e: any) {
-            toast.error("Error: " + e.message);
-        }
+    function setNft(tokenId: string) {
+        setNftId(tokenId);
+        setOpen(true);
     }
 
-    console.log(nftData);
+    const handleClose = () => {
+        setOpen(false);
+    };
+
+    async function handleSell() {
+        // console.log(nftId);
+        await sellAsset(nftId, price);
+        handleClose();
+        toast.success("Successfully listed on marketplace.");
+    }
 
     return (
         <section className="relative">
@@ -101,6 +76,7 @@ export default function FeaturesBlocks() {
                                 nftData={item}
                                 key={item.tokenId}
                                 setopen={setNft}
+                                email={email}
                             />
                         ))}
                     </div>
@@ -114,20 +90,20 @@ export default function FeaturesBlocks() {
                         <TextField
                             autoFocus
                             margin="dense"
-                            id="address"
-                            label="Recepient Address"
+                            id="price"
+                            label="Marketplace price"
                             type="text"
                             fullWidth
                             variant="outlined"
-                            value={address}
+                            value={price}
                             onChange={(e) => {
-                                setAddress(e.target.value);
+                                setPrice(e.target.value);
                             }}
                         />
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button onClick={handelClaim}>Claim</Button>
+                        <Button onClick={handleClose}>Close</Button>
+                        <Button onClick={handleSell}>Sell</Button>
                     </DialogActions>
                 </Dialog>
             </div>
@@ -136,20 +112,18 @@ export default function FeaturesBlocks() {
     );
 }
 
-function NftCard({ nftData, setopen }: any) {
-    let imageUrl = "";
+function NftCard({ nftData, setopen, email }: any) {
 
-    if (nftData.imageUrl) {
-        imageUrl = nftData.imageUrl;
-    } else {
-        imageUrl =
-            "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930";
+
+    async function handleRender() {
+        await setMain(nftData.tokenId)
+        await callSyncPin(email)
+        toast.success("Asset pinned for reality.");
     }
 
-    console.log(nftData);
     return (
         <div className="relative flex flex-col items-center p-6 bg-white rounded shadow-xl">
-            <img
+            {/* <img
                 src={imageUrl}
                 className="w-full aspect-square "
                 onError={({ currentTarget }) => {
@@ -157,26 +131,22 @@ function NftCard({ nftData, setopen }: any) {
                     currentTarget.src =
                         "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930";
                 }}
-            />
+            /> */}
+            <p className="w-full aspect-square">{nftData.promptHash}</p>
             {/* <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 mt-3">
         Your NFT
       </h4> */}
             <p className="text-gray-600 text-ellipsis whitespace-nowrap overflow-hidden w-full mt-2">
-                NFT Address: {nftData.tokenId}
+                NFT ID: {nftData.tokenId}
             </p>
             <div className="w-full">
-                {nftData.claimed ? (
-                    <div className="p-1 px-8 text-white bg-blue-600 hover:bg-blue-700 mt-2 rounded-md text-sm inline-block">
-                        Already Claimed
-                    </div>
-                ) : (
-                    <button
-                        onClick={() => setopen(nftData.tokenId)}
-                        className="p-1 px-8 text-white bg-blue-600 hover:bg-blue-700 mt-2 rounded-md text-sm"
-                    >
-                        Claim
-                    </button>
-                )}
+                <button
+                    onClick={() => setopen(nftData.tokenId)}
+                    className="p-1 px-8 text-white bg-blue-600 hover:bg-blue-700 mt-2 rounded-md text-sm"
+                >
+                    Sell
+                </button>
+                <button className="p-1 px-8 text-white bg-blue-600 hover:bg-blue-700 mt-2 rounded-md text-sm ml-2 " onClick={handleRender}>Pin for Reality</button>
             </div>
         </div>
     );

@@ -45,37 +45,7 @@ export default function FeaturesBlocks() {
         }
     }, [user?.emailAddresses]);
 
-    async function handelClaim() {
-        handleClose();
-        if (!user?.primaryEmailAddress?.emailAddress) {
-            toast.error("You are not logged in. Login to continue");
-            return false;
-        }
-
-        if (!address) {
-            toast.error("Enter receiver Address");
-            return false;
-        }
-        if (!nftAddress) {
-            toast.error("NFT address not found");
-            return false;
-        }
-
-        try {
-            const response = await axios.patch(
-                "https://mint-my-words.onrender.com/users/" +
-                    user?.primaryEmailAddress?.emailAddress +
-                    "/nft/claimed/" +
-                    nftAddress,
-                { receiverAddress: address }
-            );
-            console.log(response);
-
-            toast.success("Successfullt minted NFT in your Solana Account.");
-        } catch (e: any) {
-            toast.error("Error: " + e.message);
-        }
-    }
+    function handelClaim() {}
 
     console.log(nftData);
 
@@ -137,19 +107,11 @@ export default function FeaturesBlocks() {
 }
 
 function NftCard({ nftData, setopen }: any) {
-    let imageUrl = "";
-
-    if (nftData.imageUrl) {
-        imageUrl = nftData.imageUrl;
-    } else {
-        imageUrl =
-            "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930";
-    }
 
     console.log(nftData);
     return (
         <div className="relative flex flex-col items-center p-6 bg-white rounded shadow-xl">
-            <img
+            {/* <img
                 src={imageUrl}
                 className="w-full aspect-square "
                 onError={({ currentTarget }) => {
@@ -157,15 +119,16 @@ function NftCard({ nftData, setopen }: any) {
                     currentTarget.src =
                         "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930";
                 }}
-            />
+            /> */}
+            <p className="w-full aspect-square">{nftData.promptHash}</p>
             {/* <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 mt-3">
         Your NFT
       </h4> */}
             <p className="text-gray-600 text-ellipsis whitespace-nowrap overflow-hidden w-full mt-2">
-                NFT Address: {nftData.tokenId}
+                NFT ID: {nftData.tokenId}
             </p>
             <div className="w-full">
-                {nftData.claimed ? (
+                {/* {nftData.claimed ? (
                     <div className="p-1 px-8 text-white bg-blue-600 hover:bg-blue-700 mt-2 rounded-md text-sm inline-block">
                         Already Claimed
                     </div>
@@ -176,7 +139,7 @@ function NftCard({ nftData, setopen }: any) {
                     >
                         Claim
                     </button>
-                )}
+                )} */}
             </div>
         </div>
     );

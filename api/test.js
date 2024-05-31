@@ -1,22 +1,46 @@
-const axios = require('axios');
+import axios from 'axios';
 
 // let baseUrl = "${baseUrl}"
 let baseUrl = "http://localhost:3080"
+let addressContract = "0xAc943bC26521e297A0A6193738693f4Ee9Dc33FA"
+let addressUser = "0x48e6a467852Fa29710AaaCDB275F85db4Fa420eB"
 
 async function callCreate(_email) {
     const apiUrl = `${baseUrl}/create`
     const payload = {
-        email: _email
+        email: _email,
+        user_address: addressUser,
+        contract_address: addressContract
     }
     const response = await axios.post(apiUrl, payload);
     console.log(response)
 }
 
+async function syncMain(_email) {
+    const apiUrl = `${baseUrl}/syncPin/${addressContract}/${_email}`
+    const response = await axios.post(apiUrl);
+    console.log(response)
+}
+
+async function fetchMain(_email) {
+    const apiUrl = `${baseUrl}/fetchMain/${addressContract}/${_email}`
+    const response = await axios.get(apiUrl);
+    console.log(response)
+}
+
+async function fetchMainRunner() {
+    const apiUrl = `${baseUrl}/fetchMain/0xAc943bC26521e297A0A6193738693f4Ee9Dc33FA/anshsaxena4190@gmail.com`
+    const response = await axios.get(apiUrl);
+    console.log(response)
+}
+
+
 async function callUpdate(_email, _assetUrl) {
     const apiUrl = `${baseUrl}/update`
     const payload = {
         email: _email,
-        asset_url: _assetUrl
+        asset_url: _assetUrl,
+        contract_address: addressContract
     }
     const response = await axios.post(apiUrl, payload);
     console.log(response)
@@ -26,25 +50,8 @@ async function callSetMain(_email, _main_url) {
     const apiUrl = `${baseUrl}/set`
     const payload = {
         email: _email,
-        main_url: _main_url
-    }
-    const response = await axios.post(apiUrl, payload);
-    console.log(response)
-}
-
-async function callFetchMain(_email) {
-    const apiUrl = `${baseUrl}/fetchMain`
-    const payload = {
-        email: _email
-    }
-    const response = await axios.post(apiUrl, payload);
-    console.log(response)
-}
-
-async function callViewAssets(_email) {
-    const apiUrl = `${baseUrl}/view`
-    const payload = {
-        email: _email
+        main_url: _main_url,
+        contract_address: addressContract
     }
     const response = await axios.post(apiUrl, payload);
     console.log(response)
@@ -62,21 +69,14 @@ async function fetchTest2(_email) {
     console.log(response.data.data)
 }
 
-async function fetchMain(_email) {
-    const apiUrl = `${baseUrl}/fetchMain/${_email}`
-    const response = await axios.get(apiUrl);
-    console.log(response)
-}
-
 async function main() {
-    let email = "anshsaxena4190@gmail.com"
+    let email = "anshsaxena419@gmail.com"
     let asset_url = "haha.com"
     let asset_url2 = "hey.com"
 
-    callCreate(email)
-    // callUpdate(email, asset_url2)
-    // callSetMain(email, asset_url)
-    // fetchMain(email)
+    // callCreate(email)
+    // syncMain(email)
+    fetchMain(email)
 }
 
 main()

@@ -4,6 +4,7 @@ import { useState, useRef, Fragment } from "react";
 import type { StaticImageData } from "next/image";
 import { Dialog, Transition } from "@headlessui/react";
 import Image from "next/image";
+import HeroImg from "@/public/images/hero.jpg";
 
 interface ModalVideoProps {
   thumb: StaticImageData;
@@ -37,7 +38,7 @@ export default function ModalVideo({
           data-aos-delay="450"
         >
           <div className="flex flex-col justify-center">
-            <iframe
+            {/* <iframe
               width={thumbWidth}
               height={thumbHeight}
               src="https://www.youtube.com/embed/K3XUWz05Yn0"
@@ -45,7 +46,13 @@ export default function ModalVideo({
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowFullScreen
-            ></iframe>
+            ></iframe> */}
+            <Image
+              width={thumbWidth}
+              height={thumbHeight}
+              src={HeroImg}
+              alt={thumbAlt}
+            />
           </div>
         </div>
       </div>

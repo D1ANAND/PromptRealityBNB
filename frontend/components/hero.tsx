@@ -1,4 +1,4 @@
-import VideoThumb from "@/public/images/hero-image.png";
+import VideoThumb from "@/public/images/hero.jpg";
 import ModalVideo from "@/components/modal-video";
 import Link from "next/link";
 
@@ -59,10 +59,10 @@ export default function Hero() {
                             className="text-5xl md:text-6xl font-extrabold leading-tighter tracking-tighter mb-4"
                             data-aos="zoom-y-out"
                         >
-                            &ldquo;Mint MyWords&rdquo;
+                            &ldquo;PromptR&rdquo;
                             <br />
                             <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
-                                Alexa Skill Demo
+                                AI meets Mixed Reality
                             </span>
                         </h1>
                         <div className="max-w-3xl mx-auto">
@@ -71,7 +71,7 @@ export default function Hero() {
                                 data-aos="zoom-y-out"
                                 data-aos-delay="150"
                             >
-                                Mint your thoughts, quotes or AI images with Alexa on the Solana Blockchain without the need for a wallet.
+                                Prompt generate through AI models and render them in Mixed Reality
                             </p>
                             <div
                                 className="max-w-xs mx-auto sm:max-w-none sm:flex sm:justify-center"

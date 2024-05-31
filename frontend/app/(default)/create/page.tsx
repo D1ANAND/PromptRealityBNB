@@ -22,7 +22,6 @@ export default function FeaturesBlocks() {
 // --------------
 
   async function mintNft() {
-    console.log("started 1")
     if (!imagetype) {
       toast.error("Choose Image type");
       return false
@@ -42,7 +41,6 @@ export default function FeaturesBlocks() {
 
     // try {
       setLoading(true)
-      console.log("started 2")
 
       await callCreate(profileEmail);
       
@@ -57,9 +55,9 @@ export default function FeaturesBlocks() {
         console.log("2d asset: ", genRes);
       }
 
-      await createAsset(genRes)
+      await createAsset(genRes, imagePrompt)
 
-      await callUpdate(profileEmail, genRes);
+      // await callUpdate(profileEmail, genRes);
     
       setLoading(false)
       toast.success("success! Asset will be minted to you");
@@ -72,7 +70,7 @@ export default function FeaturesBlocks() {
 
   async function generationMeshyAsset(email: string, prompt: string) {
     try {
-      const generation: string = `hey testing.. ${prompt}`;
+      const generation: string = `generating asset for.. ${prompt}`;
       // const res = await mintAsset(email, generation)
       return generation;
     } catch (error) {
@@ -82,7 +80,7 @@ export default function FeaturesBlocks() {
   
   async function generationDalleAsset(email: string, prompt: string) {
     try {
-      const generation: string = `hey test ${prompt}`;
+      const generation: string = `generating asset for ${prompt}`;
       // const res = await mintAsset(email, generation)
       return generation;
     } catch (error) {
@@ -136,14 +134,14 @@ export default function FeaturesBlocks() {
   //   }
   // }
 
-  async function mintAsset(email: string, generation: string) {
-    try {
-      const res = await createAsset(email, generation)
-      return res;
-    } catch (error) {
-      throw error;
-    }
-  }
+  // async function mintAsset(email: string, generation: string) {
+  //   try {
+  //     const res = await createAsset(email, generation)
+  //     return res;
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
 
 
 
@@ -153,11 +151,9 @@ export default function FeaturesBlocks() {
         <div className="py-12 md:py-20">
           {/* Section header */}
           <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
-            <h2 className="h2 mb-4">Mint your assets</h2>
+            <h2 className="h2 mb-4">Generate assets</h2>
             <p className="text-xl text-gray-600">
-              Since our Alexa skill is still not published, You can test our
-              service using this demo form. Just Enter prompt and select image
-              type, we will your send NFT by mail.
+              Generate assets for your reality by entering the prompt and selecting the AI model to mint them on-chain.
             </p>
           </div>
 
@@ -195,7 +191,7 @@ export default function FeaturesBlocks() {
                 disabled={loading}
                 className="py-4 px-10 mx-auto text-white bg-blue-600 hover:bg-blue-700  rounded-md text-sm disabled:opacity-60"
               >
-                Mint NFT
+                Generate
               </button>
             </div>
           </div>

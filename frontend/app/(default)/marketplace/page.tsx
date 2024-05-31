@@ -9,76 +9,34 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import toast, { Toaster } from "react-hot-toast";
-import { fetchMarketplacePage } from "../../../utils"
+import { fetchMarketplacePage, buyAsset } from "../../../utils";
 
 export default function FeaturesBlocks() {
     const [nftData, setNftData] = useState<any[]>([]);
     const { isLoaded, isSignedIn, user } = useUser();
 
-    const [address, setAddress] = useState("");
-
     const [open, setOpen] = useState(false);
-    const [nftAddress, setNftAddres] = useState("");
 
-    function setNft(address: string) {
-        setNftAddres(address);
+    const [nftId, setNftId] = useState("");
+    const [price, setPrice] = useState("");
+
+    useEffect(() => {
+        fetchInventory()
+    }, [user?.emailAddresses]);
+
+    async function fetchInventory() {
+        const data: any[] = await fetchMarketplacePage();
+        setNftData(data)
+    }
+
+    function setNft(tokenId: string) {
+        setNftId(tokenId);
         setOpen(true);
     }
 
     const handleClose = () => {
         setOpen(false);
     };
-
-    useEffect(() => {
-        async function fetchInventory(email: string) {
-          const data: any[] = await fetchMarketplacePage()
-          return data;
-        }
-
-        if (user?.primaryEmailAddress?.emailAddress) {
-          fetchInventory(user.primaryEmailAddress?.emailAddress).then((data) =>
-                setNftData(data)
-            );
-        } else {
-            if (isLoaded)
-                toast.error("You are not logged in. Login to continue");
-        }
-    }, [user?.emailAddresses]);
-
-    async function handelClaim() {
-        handleClose();
-        if (!user?.primaryEmailAddress?.emailAddress) {
-            toast.error("You are not logged in. Login to continue");
-            return false;
-        }
-
-        if (!address) {
-            toast.error("Enter receiver Address");
-            return false;
-        }
-        if (!nftAddress) {
-            toast.error("NFT address not found");
-            return false;
-        }
-
-        try {
-            const response = await axios.patch(
-                "https://mint-my-words.onrender.com/users/" +
-                    user?.primaryEmailAddress?.emailAddress +
-                    "/nft/claimed/" +
-                    nftAddress,
-                { receiverAddress: address }
-            );
-            console.log(response);
-
-            toast.success("Successfullt minted NFT in your Solana Account.");
-        } catch (e: any) {
-            toast.error("Error: " + e.message);
-        }
-    }
-
-    console.log(nftData);
-
     return (
         <section className="relative">
             <div className="absolute left-0 right-0 bottom-0 m-auto w-px p-px h-20 bg-gray-200 transform translate-y-1/2"></div>
@@ -107,49 +65,21 @@ export default function FeaturesBlocks() {
                 </div>
             </div>
 
-            <div className="max-md">
-                <Dialog fullWidth open={open} onClose={handleClose}>
-                    <DialogTitle>Buy Asset</DialogTitle>
-                    <DialogContent>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="address"
-                            label="Recepient Address"
-                            type="text"
-                            fullWidth
-                            variant="outlined"
-                            value={address}
-                            onChange={(e) => {
-                                setAddress(e.target.value);
-                            }}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose}>Cancel</Button>
-                        <Button onClick={handelClaim}>Claim</Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
             <Toaster />
         </section>
     );
 }
 
 function NftCard({ nftData, setopen }: any) {
-    let imageUrl = "";
 
-    if (nftData.imageUrl) {
-        imageUrl = nftData.imageUrl;
-    } else {
-        imageUrl =
-            "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930";
+    async function handleBuy() {
+        await buyAsset(nftData.tokenId, nftData.price)
+        toast.success("Asset will now be rendered in reality.");
     }
 
-    console.log(nftData);
     return (
         <div className="relative flex flex-col items-center p-6 bg-white rounded shadow-xl">
-            <img
+            {/* <img
                 src={imageUrl}
                 className="w-full aspect-square "
                 onError={({ currentTarget }) => {
@@ -157,26 +87,16 @@ function NftCard({ nftData, setopen }: any) {
                     currentTarget.src =
                         "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930";
                 }}
-            />
+            /> */}
+            <p className="w-full aspect-square">{nftData.promptHash}</p>
             {/* <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 mt-3">
         Your NFT
       </h4> */}
             <p className="text-gray-600 text-ellipsis whitespace-nowrap overflow-hidden w-full mt-2">
-                NFT Address: {nftData.tokenId}
+                NFT ID: {nftData.tokenId}
             </p>
             <div className="w-full">
-                {nftData.claimed ? (
-                    <div className="p-1 px-8 text-white bg-blue-600 hover:bg-blue-700 mt-2 rounded-md text-sm inline-block">
-                        Already Claimed
-                    </div>
-                ) : (
-                    <button
-                        onClick={() => setopen(nftData.tokenId)}
-                        className="p-1 px-8 text-white bg-blue-600 hover:bg-blue-700 mt-2 rounded-md text-sm"
-                    >
-                        Claim
-                    </button>
-                )}
+                <button className="p-1 px-8 text-white bg-blue-600 hover:bg-blue-700 mt-2 rounded-md text-sm ml-2 " onClick={handleBuy}>Buy</button>
             </div>
         </div>
     );
