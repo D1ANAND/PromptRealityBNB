@@ -30,6 +30,19 @@ app.use(cors({ origin: true }));
 // );
 
 let emailList = [];
+let communicationContract = ""
+
+app.post("/updateContract", (req, res) => {
+    const contract_address = req.body.contract_address;
+    if (contract_address) {
+        updateContractAddress(contract_address);
+        communicationContract = contract_address
+        console.log("Contract link updated");
+        return res.status(200).json({ message: "Contract link updated" });
+    } else {
+        return res.status(400).json({ message: "Failed" });
+    }
+});
 
 app.post("/create", (req, res) => {
     const email = req.body.email;
@@ -42,6 +55,7 @@ app.post("/create", (req, res) => {
                 user.contract_address === contract_address
         );
         if (user) {
+            console.log("User already exist");
             res.status(200).json({ message: "User already exist" });
         } else {
             let obj = {
@@ -52,8 +66,9 @@ app.post("/create", (req, res) => {
                 main_url: "",
             };
             emailList.push(obj);
+            console.log("User added successfully");
             res.status(200).json({
-                message: "Email added successfully",
+                message: "User added successfully",
                 emails: emailList,
             });
         }
@@ -70,10 +85,10 @@ app.post("/syncPin/:contract_address/:email", async (req, res) => {
     );
     if (user) {
         try {
-            console.log("userAddress: ", user.user_address);
             const uri = await fetchURI(user.user_address);
-            console.log(uri)
+            console.log("uri: ", uri)
             user.main_url = uri;
+            console.log(`Pin Synced for ${email}`)
             res.status(200).json({ message: "Pin Synced" });
         } catch (error) {
             console.error(error);
@@ -84,11 +99,11 @@ app.post("/syncPin/:contract_address/:email", async (req, res) => {
     }
 });
 
-app.get("/fetchMain/:contract_address/:email", (req, res) => {
-    const { contract_address, email } = req.params;
+app.get("/fetchMain/:email", (req, res) => {
+    const { email } = req.params;
     const user = emailList.find(
         (user) =>
-            user.email === email && user.contract_address === contract_address
+            user.email === email && user.contract_address === communicationContract
     );
     if (user) {
         const obj = {
@@ -101,15 +116,6 @@ app.get("/fetchMain/:contract_address/:email", (req, res) => {
 
 app.get("/emails", (req, res) => {
     res.status(200).json(emailList);
-});
-
-app.post("/contract", (req, res) => {
-    const contract_address = req.body.contract_address;
-    if (contract_address) {
-        updateContractAddress(contract_address);
-    } else {
-        res.status(400).json({ message: "Failed" });
-    }
 });
 
 app.post("/update", (req, res) => {

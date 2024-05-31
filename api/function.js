@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 
-let addressContract =  `0xAc943bC26521e297A0A6193738693f4Ee9Dc33FA`
+let addressContract =  ``
 
 export async function fetchURI(_userAddress) {
     const provider = new ethers.providers.JsonRpcProvider("https://polygon-amoy.infura.io/v3/2HvD0iID3OjnCRpKjKpqXYMcdRV");
@@ -13,7 +13,7 @@ export async function fetchURI(_userAddress) {
     return uri
 }
 
-export async function updateContractAddress(_address) {
+export function updateContractAddress(_address) {
     addressContract = _address;
 }
 
