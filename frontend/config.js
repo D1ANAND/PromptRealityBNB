@@ -1,4 +1,4 @@
-export const addressContract =  `0x18aE94089aee4e396c4Eb26B8807e1026b44471d`
+export const addressContract =  `0x18FF6d1c1A8Fd60F9De80945c6E562ed17Db9D27`
 
 export const abi = `[
 	{
@@ -219,6 +219,32 @@ export const abi = `[
 	{
 		"inputs": [
 			{
+				"internalType": "string",
+				"name": "_result",
+				"type": "string"
+			}
+		],
+		"name": "_apiFallback",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string[]",
+				"name": "_prompt",
+				"type": "string[]"
+			}
+		],
+		"name": "apiCall",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "address",
 				"name": "to",
 				"type": "address"
@@ -251,6 +277,24 @@ export const abi = `[
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_receiver",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_tokenId",
+				"type": "uint256"
+			}
+		],
+		"name": "bridge",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -303,7 +347,7 @@ export const abi = `[
 						"type": "string"
 					}
 				],
-				"internalType": "struct NFTMinter.Asset[]",
+				"internalType": "struct Marketplace.Asset[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -354,7 +398,7 @@ export const abi = `[
 						"type": "string"
 					}
 				],
-				"internalType": "struct NFTMinter.Asset[]",
+				"internalType": "struct Marketplace.Asset[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -379,6 +423,25 @@ export const abi = `[
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "getDataFeeds",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -544,6 +607,19 @@ export const abi = `[
 			}
 		],
 		"name": "setApprovalForAll",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_initChainlinkAddress",
+				"type": "address"
+			}
+		],
+		"name": "setInitChainlink",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

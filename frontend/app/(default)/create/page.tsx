@@ -8,9 +8,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import toast, { Toaster } from "react-hot-toast";
-import { createAsset, callCreate } from "../../../utils"
-
-// const BASE_URL = "https://mint-my-words.onrender.com/users/";
+import { callCreate, createAsset, callUpdate } from "../../../utils"
 
 export default function FeaturesBlocks() {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -21,7 +19,10 @@ export default function FeaturesBlocks() {
     setAge(event.target.value);
   };
 
+// --------------
+
   async function mintNft() {
+    console.log("started 1")
     if (!imagetype) {
       toast.error("Choose Image type");
       return false
@@ -35,46 +36,81 @@ export default function FeaturesBlocks() {
         toast.error("You are not logged in. Login to continue");
         return false
     }
-    // if (!user?.fullName){
-    //     toast.error("Your Name is not given in your Gmail.");
-    //     return false
-    // }
 
-    // const profileName = user.fullName
     const profileEmail = user?.primaryEmailAddress?.emailAddress
+    console.log("profileEmail: ", profileEmail)
 
-    try {
+    // try {
       setLoading(true)
-      
-      await mintNFTSimulator(profileEmail, imagePrompt, imagetype);
-      setLoading(false)
-      toast.success("success! You will receive NFT on yoru mail within a minute");
-    } catch (error: any) {
-        setLoading(false)
-        toast.error("Error: "+ error.message);
-        console.log(error);
-    }
-  }
+      console.log("started 2")
 
-  
-  async function mintNFTSimulator(email: string, prompt: string, type: string) {
-    try {
-      const user = await checkUserExistence(email);
-      console.log("user", user)
-      if (type === "ai"){
-        const res = await generationMeshyAsset(email, prompt);
-        console.log("minted 3d asset: ", res);
+      await callCreate(profileEmail);
+      
+      let genRes: any;
+
+      if (imagetype === "ai"){
+        genRes = await generationMeshyAsset(profileEmail, imagePrompt);
+        console.log("3d asset: ", genRes);
       }
       else{
-        const res = await generationDalleAsset(email, prompt);
-        console.log("minted 2d asset: ", res);
+        genRes = await generationDalleAsset(profileEmail, imagePrompt);
+        console.log("2d asset: ", genRes);
       }
+
+      await createAsset(genRes)
+
+      await callUpdate(profileEmail, genRes);
+    
+      setLoading(false)
+      toast.success("success! Asset will be minted to you");
+    // } catch (error: any) {
+    //     setLoading(false)
+    //     toast.error("Error: "+ error.message);
+    //     console.log(error);
+    // }
+  }
+
+  async function generationMeshyAsset(email: string, prompt: string) {
+    try {
+      const generation: string = `hey testing.. ${prompt}`;
+      // const res = await mintAsset(email, generation)
+      return generation;
     } catch (error) {
       throw error;
     }
   }
   
-  async function checkUserExistence( email: string) {
+  async function generationDalleAsset(email: string, prompt: string) {
+    try {
+      const generation: string = `hey test ${prompt}`;
+      // const res = await mintAsset(email, generation)
+      return generation;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // --------------
+
+
+  // async function mintNFTSimulator(email: string, prompt: string, type: string) {
+  //   try {
+  //     const res = await checkUserExistence(email);
+  //     console.log("res: ", res)
+  //     if (type === "ai"){
+  //       const res = await generationMeshyAsset(email, prompt);
+  //       console.log("minted 3d asset: ", res);
+  //     }
+  //     else{
+  //       const res = await generationDalleAsset(email, prompt);
+  //       console.log("minted 2d asset: ", res);
+  //     }
+  //   } catch (error) {
+  //     throw error;
+  //   }
+  // }
+  
+  async function checkUserExistence(email: string) {
     try {
       const res = await callCreate(email);
       return res;
@@ -99,26 +135,6 @@ export default function FeaturesBlocks() {
   //     throw error;
   //   }
   // }
-
-  async function generationMeshyAsset(email: string, prompt: string) {
-    try {
-      const generation: string = `hey test ${prompt}`;
-      const res = await mintAsset(email, generation)
-      return res;
-    } catch (error) {
-      throw error;
-    }
-  }
-  
-  async function generationDalleAsset(email: string, prompt: string) {
-    try {
-      const generation: string = `hey test ${prompt}`;
-      const res = await mintAsset(email, generation)
-      return res;
-    } catch (error) {
-      throw error;
-    }
-  }
 
   async function mintAsset(email: string, generation: string) {
     try {

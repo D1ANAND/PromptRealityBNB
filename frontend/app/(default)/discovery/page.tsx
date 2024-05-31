@@ -9,7 +9,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import toast, { Toaster } from "react-hot-toast";
-import { fetchInventoryAssets } from "../../../utils"
+import { fetchAllAssets } from "../../../utils"
 
 export default function FeaturesBlocks() {
     const [nftData, setNftData] = useState<any[]>([]);
@@ -31,7 +31,7 @@ export default function FeaturesBlocks() {
 
     useEffect(() => {
         async function fetchInventory(email: string) {
-          const data: any[] = await fetchInventoryAssets()
+          const data: any[] = await fetchAllAssets()
           return data;
         }
 
@@ -86,7 +86,7 @@ export default function FeaturesBlocks() {
                 <div className="py-12 md:py-20">
                     {/* Section header */}
                     <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
-                        <h2 className="h2 mb-4">Inventory</h2>
+                        <h2 className="h2 mb-4">Explore</h2>
                         <p className="text-xl text-gray-600">
                             See all the NFTs minted by you below. You can claim
                             these by hitting the claim button and entering your

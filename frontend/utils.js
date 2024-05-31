@@ -28,10 +28,9 @@ export async function getContract(providerOrSigner) {
 
 // --------Write
 
-export async function createAsset(email, _tokenUri) {
+export async function createAsset(_tokenUri) {
     const contract = await getContract(true);
     const address = await getUserAddress()
-    await callUpdate(email, _tokenUri)
     const tx = await contract.mintAsset(address, _tokenUri);
     await tx.wait();
     fetchAllAssets();
@@ -63,7 +62,7 @@ export async function buyAsset(_tokenId, _price) {
 
 let allAssets = [];
 
-async function fetchAllAssets() {
+export async function fetchAllAssets() {
     const contract = await getContract(true);
     const data = await contract.fetchAllModels();
   
@@ -134,8 +133,11 @@ export async function fetchInventoryAssets() {
 
 // --------APICall
 
+// let baseUrl = "https://mixed-reality-apis-zvglklnxya-em.a.run.app"
+let baseUrl = "http://localhost:3080"
+
 export async function callCreate(_email) {
-    const apiUrl = `https://mixed-reality-apis-zvglklnxya-em.a.run.app/create`
+    const apiUrl = `${baseUrl}/create`
     const payload = {
         email: _email
     }
@@ -144,7 +146,7 @@ export async function callCreate(_email) {
 }
 
 export async function callUpdate(_email, _assetUrl) {
-    const apiUrl = `https://mixed-reality-apis-zvglklnxya-em.a.run.app/update`
+    const apiUrl = `${baseUrl}/update`
     const payload = {
         email: _email,
         asset_url: _assetUrl
@@ -154,7 +156,7 @@ export async function callUpdate(_email, _assetUrl) {
 }
 
 export async function callSetMain(_email, _main_url) {
-    const apiUrl = `https://mixed-reality-apis-zvglklnxya-em.a.run.app/set`
+    const apiUrl = `${baseUrl}/set`
     const payload = {
         email: _email,
         main_url: _main_url
@@ -164,10 +166,7 @@ export async function callSetMain(_email, _main_url) {
 }
 
 export async function callFetchMain(_email) {
-    const apiUrl = `https://mixed-reality-apis-zvglklnxya-em.a.run.app/fetchMain`
-    const payload = {
-        email: _email
-    }
-    const response = await axios.post(apiUrl, payload);
+    const apiUrl = `${baseUrl}/fetchMain/${_email}`
+    const response = await axios.get(apiUrl, payload);
     console.log(response.data)
 }
