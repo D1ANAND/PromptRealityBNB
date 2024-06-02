@@ -129,12 +129,14 @@ app.get("/latestGeneration/:email", (req, res) => {
     res.status(404).json({ error: "User not found" });
 });
 
-app.get("/emails", (req, res) => {
-    res.status(200).json(emailList);
-});
+app.get("/view", (req, res) => {
+    let obj = {
+        emailList: emailList,
+        latestGeneration: latestGeneration,
+        communicationContract: communicationContract
 
-app.get("/generations", (req, res) => {
-    res.status(200).json(latestGeneration);
+    };
+    res.status(200).json(obj);
 });
 
 // Start the server

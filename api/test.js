@@ -66,7 +66,7 @@ function replaceWhitespaceWithHyphen(inputString) {
 }
 
 
-let addressContract = "0x9488e8282518a472d27cDaE73b92A0A1B48825B0"
+let addressContract = "0x7D24f511CE6f2a23A5B3F82287Cd094fc867ED7A"
 
 let addressUser = "0x48e6a467852Fa29710AaaCDB275F85db4Fa420eB"
 
@@ -77,7 +77,7 @@ async function main() {
     let email = "anshsaxena4190@gmail.com"
     let email2 = "test@gmail.com"
 
-    // callUpdateContract(addressContract)
+    callUpdateContract(addressContract)
     // callCreate(email)
     // syncMain(email)
     // fetchMain(email)
