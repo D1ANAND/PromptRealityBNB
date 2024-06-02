@@ -66,12 +66,12 @@ function replaceWhitespaceWithHyphen(inputString) {
 }
 
 
-let addressContract = "0x3574bB654D49230fDc7Bc721b0CC85800199D188"
+let addressContract = "0x9488e8282518a472d27cDaE73b92A0A1B48825B0"
 
 let addressUser = "0x48e6a467852Fa29710AaaCDB275F85db4Fa420eB"
 
-// let baseUrl = "https://promptreality.onrender.com"
-let baseUrl = "http://localhost:3080"
+let baseUrl = "https://promptreality.onrender.com"
+// let baseUrl = "http://localhost:3080"
 
 async function main() {
     let email = "anshsaxena419@gmail.com"
@@ -82,9 +82,9 @@ async function main() {
     // syncMain(email)
     // fetchMain(email)
 
-    // callUpdateLatestGeneration("moon", email)
+    callUpdateLatestGeneration("moon", email)
     // callUpdateLatestGeneration("swan", email2)
-    fetchLatestGeneration(email2)
+    // fetchLatestGeneration(email)
 
     // generationMeshyAsset("green color monster with 3 eyes and 4 legs")
 }

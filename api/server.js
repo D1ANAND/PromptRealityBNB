@@ -9,26 +9,6 @@ app.use(json());
 
 app.use(cors({ origin: true }));
 
-// const allowedOrigins = [
-//     "http://localhost:3000",
-//     "https:/prompt-reality-78.vercel.app",
-// ];
-
-// app.use(
-//     cors({
-//         origin: function (origin, callback) {
-//             // Check if the incoming origin is in the allowedOrigins array
-//             if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-//                 callback(null, true);
-//             } else {
-//                 callback(new Error("Not allowed by CORS"));
-//             }
-//         },
-//         methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
-//         allowedHeaders: ["Content-Type", "Authorization"],
-//     })
-// );
-
 let emailList = [];
 let communicationContract = "";
 let latestGeneration = [];
@@ -120,13 +100,25 @@ app.get("/emails", (req, res) => {
     res.status(200).json(emailList);
 });
 
+app.get("/generations", (req, res) => {
+    res.status(200).json(latestGeneration);
+});
+
 app.post("/updateLatestGeneration", (req, res) => {
     const generation = req.body.generation;
     const email = req.body.email;
     if (generation) {
-        latestGeneration.push({ email: email, generation: generation });
-        console.log("Latest generation updated");
-        return res.status(200).json({ message: "Latest generation updated" });
+        const userGeneration = latestGeneration.find((gen) => gen.email === email);
+        if (userGeneration) {
+            userGeneration.generation = generation;
+            console.log("Latest generation updated");
+            return res.status(200).json({ message: "Latest generation updated" });
+        }
+        else {
+            latestGeneration.push({ email: email, generation: generation });
+            console.log("Latest generation updated");
+            return res.status(200).json({ message: "Latest generation updated" });
+        }
     } else {
         return res.status(400).json({ message: "Failed" });
     }
@@ -136,10 +128,7 @@ app.get("/latestGeneration/:email", (req, res) => {
     const { email } = req.params;
     const userGeneration = latestGeneration.find((gen) => gen.email === email);
     if (userGeneration) {
-        const obj = {
-            generation: userGeneration.generation,
-        };
-        return res.status(200).json(obj);
+        return res.status(200).json(userGeneration);
     }
     res.status(404).json({ error: "User not found" });
 });
