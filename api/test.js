@@ -38,9 +38,36 @@ async function callUpdateContract(_contractAddress) {
     console.log(response)
 }
 
-let addressUser = "0x48e6a467852Fa29710AaaCDB275F85db4Fa420eB"
+async function callUpdateLatestGeneration(_generation) {
+    const apiUrl = `${baseUrl}/updateLatestGeneration`
+    const payload = {
+        generation: _generation
+    }
+    const response = await axios.post(apiUrl, payload);
+    console.log(response)
+}
 
-let addressContract = "0xb2A1B626aC402DBcd3C0A8450091f6F4a64b5fFA"
+async function fetchLatestGeneration() {
+    const apiUrl = `${baseUrl}/latestGeneration/`
+    const response = await axios.get(apiUrl);
+    console.log(response)
+}
+
+export async function generationMeshyAsset(imagePrompt) {
+    let modifiedImagePrompt = replaceWhitespaceWithHyphen(imagePrompt)
+    const apiUrl = `https://mixed-reality-apis-zvglklnxya-em.a.run.app/generateassets/${modifiedImagePrompt} ⁠`;
+    const response = await axios.get(apiUrl);
+    console.log(response.data);
+}
+
+function replaceWhitespaceWithHyphen(inputString) {
+    return inputString.replace(/\s+/g, '-');
+}
+
+
+let addressContract = "0x3574bB654D49230fDc7Bc721b0CC85800199D188"
+
+let addressUser = "0x48e6a467852Fa29710AaaCDB275F85db4Fa420eB"
 
 // let baseUrl = "https://promptreality.onrender.com"
 let baseUrl = "http://localhost:3080"
@@ -51,7 +78,12 @@ async function main() {
     // callUpdateContract(addressContract)
     // callCreate(email)
     // syncMain(email)
-    fetchMain(email)
+    // fetchMain(email)
+
+    // callUpdateLatestGeneration("moon")
+    // fetchLatestGeneration()
+
+    // generationMeshyAsset("green color monster with 3 eyes and 4 legs")
 }
 
 main()

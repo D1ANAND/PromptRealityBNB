@@ -31,6 +31,7 @@ app.use(cors({ origin: true }));
 
 let emailList = [];
 let communicationContract = ""
+let latestGeneration = ""
 
 app.post("/updateContract", (req, res) => {
     const contract_address = req.body.contract_address;
@@ -87,7 +88,7 @@ app.post("/syncPin/:contract_address/:email", async (req, res) => {
         try {
             const uri = await fetchURI(user.user_address);
             console.log("uri: ", uri)
-            user.main_url = uri;
+            user.main_url = uri?.s3_url;
             console.log(`Pin Synced for ${email}`)
             res.status(200).json({ message: "Pin Synced" });
         } catch (error) {
@@ -118,52 +119,19 @@ app.get("/emails", (req, res) => {
     res.status(200).json(emailList);
 });
 
-app.post("/update", (req, res) => {
-    const email = req.body.email;
-    const asset_url = req.body.asset_url;
-    const contract_address = req.body.contract_address;
-    if ((email, asset_url, contract_address)) {
-        const user = emailList.find(
-            (user) =>
-                user.email === email &&
-                user.contract_address === contract_address
-        );
-        if (user) {
-            user.assets.push(asset_url);
-            res.status(200).json({
-                message: "Asset updated successfully",
-                emails: emailList,
-            });
-        } else {
-            res.status(404).json({ message: "User not found" });
-        }
+app.post("/updateLatestGeneration", (req, res) => {
+    const generation = req.body.generation;
+    if (generation) {
+        latestGeneration = generation
+        console.log("Latest generation updated");
+        return res.status(200).json({ message: "Latest generation updated" });
     } else {
-        res.status(400).json({ message: "Failed" });
+        return res.status(400).json({ message: "Failed" });
     }
 });
 
-app.post("/set", (req, res) => {
-    const email = req.body.email;
-    const main_url = req.body.main_url;
-    const contract_address = req.body.contract_address;
-    if ((email, main_url, contract_address)) {
-        const user = emailList.find(
-            (user) =>
-                user.email === email &&
-                user.contract_address === contract_address
-        );
-        if (user) {
-            user.main_url = main_url;
-            res.status(200).json({
-                message: "MainUrl updated successfully",
-                emails: emailList,
-            });
-        } else {
-            res.status(404).json({ message: "User not found" });
-        }
-    } else {
-        res.status(400).json({ message: "Failed" });
-    }
+app.get("/latestGeneration", (req, res) => {
+    res.status(200).json({ generation: latestGeneration });
 });
 
 // Start the server
