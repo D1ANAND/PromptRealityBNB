@@ -4,8 +4,8 @@ import { useState, useRef, useEffect } from 'react'
 import { Transition } from '@headlessui/react'
 import Image from 'next/image'
 import AlexaDemoImage from '@/public/images/feature1.png'
-import ClaimImage from '@/public/images/feature2.png'
-import Gmailimage from '@/public/images/feature3.png'
+import Gmailimage from '@/public/images/feature2.png'
+import ClaimImage from '@/public/images/feature3.png'
 
 export default function Features() {
   

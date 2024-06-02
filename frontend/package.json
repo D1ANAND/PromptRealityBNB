@@ -13,6 +13,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@headlessui/react": "^1.7.14",
+    "@lighthouse-web3/sdk": "^0.3.3",
     "@mui/material": "^5.14.2",
     "@rainbow-me/rainbowkit": "^2.1.1",
     "@tanstack/react-query": "^5.40.0",
@@ -26,10 +27,9 @@
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.1",
     "typescript": "^5.0.4",
-    "web3modal": "^1.9.12",
     "viem": "^2.7.14",
-    "wagmi": "^2.5.7"
-
+    "wagmi": "^2.5.7",
+    "web3modal": "^1.9.12"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.3",

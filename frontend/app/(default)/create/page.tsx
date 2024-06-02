@@ -8,7 +8,7 @@ import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import TextField from "@mui/material/TextField";
 import toast, { Toaster } from "react-hot-toast";
-import { callCreate, generationMeshyAsset, generationDallEAsset, createAssetOnChain } from "../../../utils";
+import { callCreate, generationMeshyAsset, generationDallEAsset, createAssetOnChain, encryptPromptUsingLighthouse } from "../../../utils";
 
 export default function FeaturesBlocks() {
     const { isLoaded, isSignedIn, user } = useUser();
@@ -47,7 +47,7 @@ export default function FeaturesBlocks() {
             await generationDallEAsset(imagePrompt, profileEmail);
         }
 
-        let _promptHash = imagePrompt
+        let _promptHash = await encryptPromptUsingLighthouse(imagePrompt)
 
         await createAssetOnChain(_promptHash, profileEmail)
 
@@ -55,24 +55,10 @@ export default function FeaturesBlocks() {
         toast.success("success! Asset will be minted to you");
     }
 
-    // async function checkUserExistence(email: string) {
-    //     try {
-    //         const res = await callCreate(email);
-    //         return res;
-    //     } catch (error: any) {
-    //         if (error.response && error.response.status === 404) {
-    //             // return createUser(name, email);
-    //         } else {
-    //             throw error;
-    //         }
-    //     }
-    // }
-
     return (
         <section className="relative">
             <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
                 <div className="py-12 md:py-20">
-                    {/* Section header */}
                     <div className="max-w-3xl mx-auto text-center pb-12 md:pb-20">
                         <h2 className="h2 mb-4">Generate assets</h2>
                         <p className="text-xl text-gray-600">

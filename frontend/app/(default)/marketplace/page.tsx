@@ -9,7 +9,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import toast, { Toaster } from "react-hot-toast";
-import { fetchMarketplacePage, buyAsset } from "../../../utils";
+import { fetchMarketplacePage, buyAsset, getAmountInDollar } from "../../../utils";
 
 export default function FeaturesBlocks() {
     const [nftData, setNftData] = useState<any[]>([]);
@@ -76,6 +76,18 @@ function NftCard({ nftData, setopen }: any) {
         await buyAsset(nftData.tokenId, nftData.price)
         toast.success("Asset will now be rendered in reality.");
     }
+    
+    const [price, setPrice] = useState("0")
+
+    useEffect(() => {
+        getAmountInDollarCall(nftData.tokenId);
+    }, [nftData])
+
+    async function getAmountInDollarCall(_tokenId : string) {
+        let amount = await getAmountInDollar(_tokenId)
+        setPrice(amount)
+        return amount;
+    }
 
     return (
         <div className="relative flex flex-col items-center p-6 bg-white rounded shadow-xl">
@@ -88,10 +100,12 @@ function NftCard({ nftData, setopen }: any) {
                         "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930";
                 }}
             /> */}
-            <p className="w-full aspect-square">Prompt: {nftData.promptHash}</p>
-            {/* <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 mt-3">
-        Your NFT
-      </h4> */}
+            <div className="w-full aspect-square">
+                <div>URI: <a href={nftData.uri} target="_blank">View</a></div>
+                <p>
+                    Price: {nftData.price} Matic or ${price}
+                </p>
+            </div>
             <p className="text-gray-600 text-ellipsis whitespace-nowrap overflow-hidden w-full mt-2">
                 NFT ID: {nftData.tokenId}
             </p>

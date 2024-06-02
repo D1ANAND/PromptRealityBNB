@@ -3,6 +3,7 @@ import web3modal from "web3modal";
 import { ethers } from "ethers";
 import { addressContract, abi } from "./config";
 import axios from "axios";
+import lighthouse from "@lighthouse-web3/sdk";
 
 // --------Instances
 
@@ -30,11 +31,11 @@ export async function getUserAddress() {
 
 export async function createAssetOnChain(_promptHash, _email) {
     const contract = await getContract(true);
-    // const params = [_promptHash, _email]
-    // console.log("params", params)
-    let inputsFormat = ["jj", "anshsaxena4190@gmail.com"]
-    console.log("inputsFormat", inputsFormat)
-    const tx = await contract.apiCallMinAsset(inputsFormat);
+    const params = [_promptHash, _email]
+    console.log("params", params)
+    // let inputsFormat = ["jj", "anshsaxena4190@gmail.com"];
+    // console.log("inputsFormat", inputsFormat);
+    const tx = await contract.apiCallMinAsset(params);
     await tx.wait();
     fetchAllAssets();
     console.log("Mint api called");
@@ -52,7 +53,7 @@ export async function sellAsset(_tokenId, _price) {
 export async function buyAsset(_tokenId, _price) {
     const contract = await getContract(true);
     const weiPrice = ethers.utils.parseUnits(_price.toString(), 18);
-    console.log("weiPrice", weiPrice)
+    console.log("weiPrice", weiPrice);
     const tx = await contract.buy({
         value: weiPrice,
         gasLimit: 1000000,
@@ -100,7 +101,7 @@ export async function fetchAllAssets() {
 
 export async function fetchMarketplacePage() {
     if (allAssets.length > 0) {
-        const filteredArray = allModels.filter(
+        const filteredArray = allAssets.filter(
             (subarray) => subarray.isSelling == "true"
         );
         return filteredArray;
@@ -144,7 +145,7 @@ export async function fetchInventoryAssets() {
 
 // --------APICall
 
-let baseUrl = "https://promptreality.onrender.com"
+let baseUrl = "https://promptreality.onrender.com";
 // let baseUrl = "http://localhost:3080";
 
 export async function callCreate(_email) {
@@ -172,32 +173,89 @@ export async function callFetchMain(_email) {
 }
 
 export async function generationMeshyAsset(imagePrompt, _email) {
-    let modifiedImagePrompt = replaceWhitespaceWithHyphen(imagePrompt)
-    // const apiUrl = `https://mixed-reality-apis-zvglklnxya-em.a.run.app/generateassets/${modifiedImagePrompt} ⁠`;
-    // const response = await axios.get(apiUrl);
-    const response = {data: {s3_url: "https://bucketforadgen.s3.amazonaws.com/generated_models/018fd7a2-1a31-73d4-83d4-4762eb5c1451.obj"}}
-    await updateLatestGeneration(response.data.s3_url, _email)
+    let modifiedImagePrompt = replaceWhitespaceWithHyphen(imagePrompt);
+    const apiUrl = `https://mixed-reality-apis-zvglklnxya-em.a.run.app/generateassets/${modifiedImagePrompt} ⁠`;
+    const response = await axios.get(apiUrl);
+    // const response = {data: {s3_url: "https://bucketforadgen.s3.amazonaws.com/generated_models/018fd7a2-1a31-73d4-83d4-4762eb5c1451.obj"}}
+    await updateLatestGeneration(response.data.s3_url, _email);
     console.log(response.data.s3_url);
 }
 
 export async function generationDallEAsset(imagePrompt, _email) {
-    let modifiedImagePrompt = replaceWhitespaceWithHyphen(imagePrompt)
+    let modifiedImagePrompt = replaceWhitespaceWithHyphen(imagePrompt);
     const apiUrl = `https://mixed-reality-apis-zvglklnxya-em.a.run.app/generateassetswithDallE/${modifiedImagePrompt} ⁠`;
     const response = await axios.get(apiUrl);
     console.log(response.data);
-    await updateLatestGeneration(response.data.s3_url, _email)
+    await updateLatestGeneration(response.data.s3_url, _email);
 }
 
 function replaceWhitespaceWithHyphen(inputString) {
-    return inputString.replace(/\s+/g, '-');
+    return inputString.replace(/\s+/g, "-");
 }
 
 async function updateLatestGeneration(_generation, _email) {
-    const apiUrl = `${baseUrl}/updateLatestGeneration`
+    const apiUrl = `${baseUrl}/updateLatestGeneration`;
     const payload = {
         generation: _generation,
-        email: _email
-    }
+        email: _email,
+    };
     const response = await axios.post(apiUrl, payload);
-    console.log(response.data)
+    console.log(response.data);
 }
+
+export async function getAmountInDollar(_tokenId) {
+    const contract = await getContract(false);
+    const amountInDollar = await contract.getPriceInUsd(_tokenId);
+    let _price = ethers.utils.formatEther(amountInDollar);
+    console.log("dollar amount", _price);
+    return _price;
+}
+
+// --------APICall
+
+const lighthouseKey = process.env.NEXT_PUBLIC_LIGHTHOUSE_KEY;
+
+export async function encryptPromptUsingLighthouse(_prompt) {
+  try {
+    const encryptionAuth = await signAuthMessage();
+    if (!encryptionAuth) {
+      console.error("Failed to sign the message.");
+      return;
+    }
+
+    const { signature, signerAddress } = encryptionAuth;
+
+    const output = await lighthouse.textUploadEncrypted(_prompt, lighthouseKey, signerAddress, signature);
+    console.log("Upload Successful", output);
+    
+    return output.data.Hash;
+  } catch (error) {
+    console.error("Error uploading encrypted file:", error);
+  }
+}
+
+const signAuthMessage = async () => {
+  if ((window).ethereum) {
+    try {
+      const accounts = await window?.ethereum?.request({
+        method: "eth_requestAccounts"
+      });
+      if (accounts.length === 0) {
+        throw new Error("No accounts returned from Wallet.");
+      }
+      const signerAddress = accounts[0];
+      const { message } = (await lighthouse.getAuthMessage(signerAddress)).data;
+      const signature = await window.ethereum.request({
+        method: "personal_sign",
+        params: [message, signerAddress]
+      });
+      return { signature, signerAddress };
+    } catch (error) {
+      console.error("Error signing message with Wallet", error);
+      return null;
+    }
+  } else {
+    console.log("Please install Wallet!");
+    return null;
+  }
+};

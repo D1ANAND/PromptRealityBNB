@@ -1,6 +1,6 @@
 export const metadata = {
-  title: 'Home - Mint My Words',
-  description: 'Homepage of Mint my words alexa skill',
+  title: 'Home - PromptReality',
+  description: 'PromptReality is a platform for creating AI experiences in augmented reality.',
 }
 
 import Hero from '@/components/hero'

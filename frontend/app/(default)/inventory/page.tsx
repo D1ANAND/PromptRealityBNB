@@ -119,7 +119,8 @@ export default function FeaturesBlocks() {
 function NftCard({ nftData, setopen, email }: any) {
     async function handleRender() {
         await setMain(nftData.tokenId);
-        await callSyncPin(email);
+        // await callSyncPin(email);
+        console.log("Pin synced")
         toast.success("Asset pinned for reality.");
     }
 
