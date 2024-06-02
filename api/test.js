@@ -35,7 +35,7 @@ async function callUpdateContract(_contractAddress) {
         contract_address: _contractAddress
     }
     const response = await axios.post(apiUrl, payload);
-    console.log(response)
+    console.log(response.data)
 }
 
 async function callUpdateLatestGeneration(_generation, _email) {
@@ -45,7 +45,7 @@ async function callUpdateLatestGeneration(_generation, _email) {
         email :_email
     }
     const response = await axios.post(apiUrl, payload);
-    console.log(response)
+    console.log(response.data)
 }
 
 async function fetchLatestGeneration(_email) {
@@ -74,7 +74,7 @@ let baseUrl = "https://promptreality.onrender.com"
 // let baseUrl = "http://localhost:3080"
 
 async function main() {
-    let email = "anshsaxena419@gmail.com"
+    let email = "anshsaxena4190@gmail.com"
     let email2 = "test@gmail.com"
 
     // callUpdateContract(addressContract)
@@ -82,8 +82,8 @@ async function main() {
     // syncMain(email)
     // fetchMain(email)
 
-    callUpdateLatestGeneration("moon", email)
-    // callUpdateLatestGeneration("swan", email2)
+    callUpdateLatestGeneration("bird", email)
+    // callUpdateLatestGeneration("animal", email2)
     // fetchLatestGeneration(email)
 
     // generationMeshyAsset("green color monster with 3 eyes and 4 legs")

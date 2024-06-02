@@ -43,7 +43,6 @@ app.post("/create", (req, res) => {
                 email: email,
                 user_address: user_address,
                 contract_address: contract_address,
-                assets: [],
                 main_url: "",
             };
             emailList.push(obj);
@@ -68,7 +67,7 @@ app.post("/syncPin/:contract_address/:email", async (req, res) => {
         try {
             const uri = await fetchURI(user.user_address);
             console.log("uri: ", uri);
-            user.main_url = uri?.s3_url;
+            user.main_url = uri;
             console.log(`Pin Synced for ${email}`);
             res.status(200).json({ message: "Pin Synced" });
         } catch (error) {
@@ -89,35 +88,32 @@ app.get("/fetchMain/:email", (req, res) => {
     );
     if (user) {
         const obj = {
-            main_url: user.main_url,
+            pin_url: user.main_url,
         };
         return res.status(200).json(obj);
     }
     res.status(404).json({ error: "User not found" });
 });
 
-app.get("/emails", (req, res) => {
-    res.status(200).json(emailList);
-});
-
-app.get("/generations", (req, res) => {
-    res.status(200).json(latestGeneration);
-});
-
 app.post("/updateLatestGeneration", (req, res) => {
     const generation = req.body.generation;
     const email = req.body.email;
     if (generation) {
-        const userGeneration = latestGeneration.find((gen) => gen.email === email);
+        const userGeneration = latestGeneration.find(
+            (gen) => gen.email === email
+        );
         if (userGeneration) {
             userGeneration.generation = generation;
             console.log("Latest generation updated");
-            return res.status(200).json({ message: "Latest generation updated" });
-        }
-        else {
+            return res
+                .status(200)
+                .json({ message: "Latest generation updated" });
+        } else {
             latestGeneration.push({ email: email, generation: generation });
             console.log("Latest generation updated");
-            return res.status(200).json({ message: "Latest generation updated" });
+            return res
+                .status(200)
+                .json({ message: "Latest generation updated" });
         }
     } else {
         return res.status(400).json({ message: "Failed" });
@@ -131,6 +127,14 @@ app.get("/latestGeneration/:email", (req, res) => {
         return res.status(200).json(userGeneration);
     }
     res.status(404).json({ error: "User not found" });
+});
+
+app.get("/emails", (req, res) => {
+    res.status(200).json(emailList);
+});
+
+app.get("/generations", (req, res) => {
+    res.status(200).json(latestGeneration);
 });
 
 // Start the server
