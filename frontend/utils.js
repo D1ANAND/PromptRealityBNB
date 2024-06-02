@@ -28,13 +28,16 @@ export async function getUserAddress() {
 
 // --------Write
 
-export async function createAsset(_tokenUri, _promptHash) {
+export async function createAssetOnChain(_promptHash, _email) {
     const contract = await getContract(true);
-    const address = await getUserAddress();
-    const tx = await contract.mintAsset(address, _tokenUri, _promptHash);
+    // const params = [_promptHash, _email]
+    // console.log("params", params)
+    let inputsFormat = ["jj", "anshsaxena4190@gmail.com"]
+    console.log("inputsFormat", inputsFormat)
+    const tx = await contract.apiCallMinAsset(inputsFormat);
     await tx.wait();
     fetchAllAssets();
-    console.log("Asset minted");
+    console.log("Mint api called");
 }
 
 export async function sellAsset(_tokenId, _price) {
@@ -43,7 +46,7 @@ export async function sellAsset(_tokenId, _price) {
     const weiPrice = ethers.utils.parseUnits(_price.toString(), "ether");
     const tx = await contract.sell(_tokenId, weiPrice);
     await tx.wait();
-    console.log("Asset minted");
+    console.log("Mint api called");
 }
 
 export async function buyAsset(_tokenId, _price) {
@@ -56,7 +59,7 @@ export async function buyAsset(_tokenId, _price) {
     });
     await tx.wait();
     fetchAllAssets();
-    console.log("Asset minted");
+    console.log("Asset bought");
 }
 
 export async function setMain(_tokenId) {
@@ -76,9 +79,6 @@ export async function fetchAllAssets() {
 
     const items = await Promise.all(
         data.map(async (i) => {
-            //   const tokenUri = await contract.uri(i.ticketId.toString());
-            //   console.log(tokenUri);
-            //   const meta = await axios.get(tokenUri);
             let _price = ethers.utils.formatEther(i.price);
             let item = {
                 tokenId: i.tokenId.toNumber(),
@@ -123,9 +123,6 @@ export async function fetchInventoryAssets() {
 
     const items = await Promise.all(
         data.map(async (i) => {
-            //   const tokenUri = await contract.uri(i.ticketId.toString());
-            //   console.log(tokenUri);
-            //   const meta = await axios.get(tokenUri);
             let _price = ethers.utils.formatEther(i.price);
             let item = {
                 tokenId: i.tokenId.toNumber(),
@@ -147,8 +144,8 @@ export async function fetchInventoryAssets() {
 
 // --------APICall
 
-// let baseUrl = "https://mixed-reality-apis-zvglklnxya-em.a.run.app"
-let baseUrl = "http://localhost:3080";
+let baseUrl = "https://promptreality.onrender.com"
+// let baseUrl = "http://localhost:3080";
 
 export async function callCreate(_email) {
     const address = await getUserAddress();
@@ -162,17 +159,6 @@ export async function callCreate(_email) {
     console.log(response.data);
 }
 
-export async function callUpdate(_email, _assetUrl) {
-    const apiUrl = `${baseUrl}/update`;
-    const payload = {
-        email: _email,
-        asset_url: _assetUrl,
-        contract_address: addressContract,
-    };
-    const response = await axios.post(apiUrl, payload);
-    console.log(response.data);
-}
-
 export async function callSyncPin(_email) {
     const apiUrl = `${baseUrl}/syncPin/${addressContract}/${_email}`;
     const response = await axios.post(apiUrl);
@@ -180,7 +166,38 @@ export async function callSyncPin(_email) {
 }
 
 export async function callFetchMain(_email) {
-    const apiUrl = `${baseUrl}/fetchMain/${addressContract}/${_email}`;
+    const apiUrl = `${baseUrl}/fetchMain/${_email}`;
     const response = await axios.get(apiUrl, payload);
     console.log(response.data);
+}
+
+export async function generationMeshyAsset(imagePrompt, _email) {
+    let modifiedImagePrompt = replaceWhitespaceWithHyphen(imagePrompt)
+    // const apiUrl = `https://mixed-reality-apis-zvglklnxya-em.a.run.app/generateassets/${modifiedImagePrompt} ⁠`;
+    // const response = await axios.get(apiUrl);
+    const response = {data: {s3_url: "https://bucketforadgen.s3.amazonaws.com/generated_models/018fd7a2-1a31-73d4-83d4-4762eb5c1451.obj"}}
+    await updateLatestGeneration(response.data.s3_url, _email)
+    console.log(response.data.s3_url);
+}
+
+export async function generationDallEAsset(imagePrompt, _email) {
+    let modifiedImagePrompt = replaceWhitespaceWithHyphen(imagePrompt)
+    const apiUrl = `https://mixed-reality-apis-zvglklnxya-em.a.run.app/generateassetswithDallE/${modifiedImagePrompt} ⁠`;
+    const response = await axios.get(apiUrl);
+    console.log(response.data);
+    await updateLatestGeneration(response.data.s3_url, _email)
+}
+
+function replaceWhitespaceWithHyphen(inputString) {
+    return inputString.replace(/\s+/g, '-');
+}
+
+async function updateLatestGeneration(_generation, _email) {
+    const apiUrl = `${baseUrl}/updateLatestGeneration`
+    const payload = {
+        generation: _generation,
+        email: _email
+    }
+    const response = await axios.post(apiUrl, payload);
+    console.log(response.data)
 }

@@ -9,7 +9,13 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import toast, { Toaster } from "react-hot-toast";
-import { fetchInventoryAssets, sellAsset, setMain, callSyncPin } from "../../../utils";
+import {
+    fetchInventoryAssets,
+    sellAsset,
+    setMain,
+    callSyncPin,
+} from "../../../utils";
+import Link from "next/link";
 
 export default function FeaturesBlocks() {
     const [nftData, setNftData] = useState<any[]>([]);
@@ -28,10 +34,8 @@ export default function FeaturesBlocks() {
         }
 
         if (user?.primaryEmailAddress?.emailAddress) {
-            setEmail(user.primaryEmailAddress?.emailAddress)
-            fetchInventory().then(
-                (data) => setNftData(data)
-            );
+            setEmail(user.primaryEmailAddress?.emailAddress);
+            fetchInventory().then((data) => setNftData(data));
         } else {
             if (isLoaded)
                 toast.error("You are not logged in. Login to continue");
@@ -113,11 +117,9 @@ export default function FeaturesBlocks() {
 }
 
 function NftCard({ nftData, setopen, email }: any) {
-
-
     async function handleRender() {
-        await setMain(nftData.tokenId)
-        await callSyncPin(email)
+        await setMain(nftData.tokenId);
+        await callSyncPin(email);
         toast.success("Asset pinned for reality.");
     }
 
@@ -132,10 +134,12 @@ function NftCard({ nftData, setopen, email }: any) {
                         "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930";
                 }}
             /> */}
-            <p className="w-full aspect-square">{nftData.promptHash}</p>
-            {/* <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 mt-3">
-        Your NFT
-      </h4> */}
+            <div className="w-full aspect-square">
+                <p>
+                    Prompt: {nftData.promptHash}
+                </p>
+                <div>URI: <a href={nftData.uri} target="_blank">View</a></div>
+            </div>
             <p className="text-gray-600 text-ellipsis whitespace-nowrap overflow-hidden w-full mt-2">
                 NFT ID: {nftData.tokenId}
             </p>
@@ -146,7 +150,12 @@ function NftCard({ nftData, setopen, email }: any) {
                 >
                     Sell
                 </button>
-                <button className="p-1 px-8 text-white bg-blue-600 hover:bg-blue-700 mt-2 rounded-md text-sm ml-2 " onClick={handleRender}>Pin for Reality</button>
+                <button
+                    className="p-1 px-8 text-white bg-blue-600 hover:bg-blue-700 mt-2 rounded-md text-sm ml-2 "
+                    onClick={handleRender}
+                >
+                    Pin for Reality
+                </button>
             </div>
         </div>
     );
