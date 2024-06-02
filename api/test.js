@@ -38,17 +38,18 @@ async function callUpdateContract(_contractAddress) {
     console.log(response)
 }
 
-async function callUpdateLatestGeneration(_generation) {
+async function callUpdateLatestGeneration(_generation, _email) {
     const apiUrl = `${baseUrl}/updateLatestGeneration`
     const payload = {
-        generation: _generation
+        generation: _generation,
+        email :_email
     }
     const response = await axios.post(apiUrl, payload);
     console.log(response)
 }
 
-async function fetchLatestGeneration() {
-    const apiUrl = `${baseUrl}/latestGeneration/`
+async function fetchLatestGeneration(_email) {
+    const apiUrl = `${baseUrl}/latestGeneration/${_email}`
     const response = await axios.get(apiUrl);
     console.log(response)
 }
@@ -74,14 +75,16 @@ let baseUrl = "http://localhost:3080"
 
 async function main() {
     let email = "anshsaxena419@gmail.com"
+    let email2 = "test@gmail.com"
 
     // callUpdateContract(addressContract)
     // callCreate(email)
     // syncMain(email)
     // fetchMain(email)
 
-    // callUpdateLatestGeneration("moon")
-    // fetchLatestGeneration()
+    // callUpdateLatestGeneration("moon", email)
+    // callUpdateLatestGeneration("swan", email2)
+    fetchLatestGeneration(email2)
 
     // generationMeshyAsset("green color monster with 3 eyes and 4 legs")
 }

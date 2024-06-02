@@ -30,14 +30,14 @@ app.use(cors({ origin: true }));
 // );
 
 let emailList = [];
-let communicationContract = ""
-let latestGeneration = ""
+let communicationContract = "";
+let latestGeneration = [];
 
 app.post("/updateContract", (req, res) => {
     const contract_address = req.body.contract_address;
     if (contract_address) {
         updateContractAddress(contract_address);
-        communicationContract = contract_address
+        communicationContract = contract_address;
         console.log("Contract link updated");
         return res.status(200).json({ message: "Contract link updated" });
     } else {
@@ -87,9 +87,9 @@ app.post("/syncPin/:contract_address/:email", async (req, res) => {
     if (user) {
         try {
             const uri = await fetchURI(user.user_address);
-            console.log("uri: ", uri)
+            console.log("uri: ", uri);
             user.main_url = uri?.s3_url;
-            console.log(`Pin Synced for ${email}`)
+            console.log(`Pin Synced for ${email}`);
             res.status(200).json({ message: "Pin Synced" });
         } catch (error) {
             console.error(error);
@@ -104,7 +104,8 @@ app.get("/fetchMain/:email", (req, res) => {
     const { email } = req.params;
     const user = emailList.find(
         (user) =>
-            user.email === email && user.contract_address === communicationContract
+            user.email === email &&
+            user.contract_address === communicationContract
     );
     if (user) {
         const obj = {
@@ -121,8 +122,9 @@ app.get("/emails", (req, res) => {
 
 app.post("/updateLatestGeneration", (req, res) => {
     const generation = req.body.generation;
+    const email = req.body.email;
     if (generation) {
-        latestGeneration = generation
+        latestGeneration.push({ email: email, generation: generation });
         console.log("Latest generation updated");
         return res.status(200).json({ message: "Latest generation updated" });
     } else {
@@ -130,8 +132,16 @@ app.post("/updateLatestGeneration", (req, res) => {
     }
 });
 
-app.get("/latestGeneration", (req, res) => {
-    res.status(200).json({ generation: latestGeneration });
+app.get("/latestGeneration/:email", (req, res) => {
+    const { email } = req.params;
+    const userGeneration = latestGeneration.find((gen) => gen.email === email);
+    if (userGeneration) {
+        const obj = {
+            generation: userGeneration.generation,
+        };
+        return res.status(200).json(obj);
+    }
+    res.status(404).json({ error: "User not found" });
 });
 
 // Start the server
