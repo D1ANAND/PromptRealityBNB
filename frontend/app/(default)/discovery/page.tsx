@@ -9,7 +9,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import toast, { Toaster } from "react-hot-toast";
-import { fetchAllAssets } from "../../../utils"
+import { fetchAllAssets } from "../../../utils";
 
 export default function FeaturesBlocks() {
     const [nftData, setNftData] = useState<any[]>([]);
@@ -31,13 +31,13 @@ export default function FeaturesBlocks() {
 
     useEffect(() => {
         async function fetchInventory(email: string) {
-          const data: any[] = await fetchAllAssets()
-          return data;
+            const data: any[] = await fetchAllAssets();
+            return data;
         }
 
         if (user?.primaryEmailAddress?.emailAddress) {
-          fetchInventory(user.primaryEmailAddress?.emailAddress).then((data) =>
-                setNftData(data)
+            fetchInventory(user.primaryEmailAddress?.emailAddress).then(
+                (data) => setNftData(data)
             );
         } else {
             if (isLoaded)
@@ -107,6 +107,9 @@ export default function FeaturesBlocks() {
 }
 
 function NftCard({ nftData, setopen }: any) {
+    function viewFunc() {
+        alert(`cid: ${nftData.promptHash}`);
+    }
 
     console.log(nftData);
     return (
@@ -120,7 +123,14 @@ function NftCard({ nftData, setopen }: any) {
                         "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg?20200913095930";
                 }}
             /> */}
-            <p className="w-full aspect-square">Prompt: {nftData.promptHash}</p>
+            <div className="w-full aspect-square">
+                <div>
+                    URI:{" "}
+                    <a href={nftData.uri} target="_blank">
+                        View
+                    </a>
+                </div>
+            </div>
             {/* <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 mt-3">
         Your NFT
       </h4> */}
@@ -128,6 +138,12 @@ function NftCard({ nftData, setopen }: any) {
                 NFT ID: {nftData.tokenId}
             </p>
             <div className="w-full">
+                <button
+                    onClick={() => setopen(nftData.tokenId)}
+                    className="p-1 px-8 text-white bg-blue-600 hover:bg-blue-700 mt-2 rounded-md text-sm"
+                >
+                    Like
+                </button>
                 {/* {nftData.claimed ? (
                     <div className="p-1 px-8 text-white bg-blue-600 hover:bg-blue-700 mt-2 rounded-md text-sm inline-block">
                         Already Claimed

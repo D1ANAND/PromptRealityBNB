@@ -124,6 +124,10 @@ function NftCard({ nftData, setopen, email }: any) {
         toast.success("Asset pinned for reality.");
     }
 
+    function viewFunc() {
+        alert(`cid: ${nftData.promptHash}`)
+    }
+
     return (
         <div className="relative flex flex-col items-center p-6 bg-white rounded shadow-xl">
             {/* <img
@@ -136,9 +140,9 @@ function NftCard({ nftData, setopen, email }: any) {
                 }}
             /> */}
             <div className="w-full aspect-square">
-                <p>
-                    Prompt: {nftData.promptHash}
-                </p>
+            
+                    Prompt: <button onClick={viewFunc}>View</button>
+                
                 <div>URI: <a href={nftData.uri} target="_blank">View</a></div>
             </div>
             <p className="text-gray-600 text-ellipsis whitespace-nowrap overflow-hidden w-full mt-2">
