@@ -31,10 +31,6 @@ latestGeneration - fetches the latest generation of the current user to validate
 <br />
 <br />
 
+[Demo Video](https://youtu.be/TjmJ6S2kj-0)
 
-[Deployed Site]()
-<br />
-[Demo Video]()
-<br />
-[Pitch deck]()
 
