@@ -48,6 +48,7 @@ contract Receive is CCIPReceiver  {
         s_lastReceivedNftUri = message._nftMetadataUri;
         s_lastReceivedNftAddress = message._nftTokenAddress;
         s_lastReceivedNftId = message._nftTokenId; // abi-decoding of the sent string message
+        mintNFT(sender, s_lastReceivedNftUri);
     }
 
     function mintNFT(address _to, string memory _tokenURI) public {

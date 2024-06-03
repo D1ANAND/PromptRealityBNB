@@ -11,7 +11,7 @@ contract PromptReality is ERC721URIStorage {
     DataFeeds public dataFeeds;
 
     //data-feeds ethereum/usd
-    address aggregatorAddress = 0x001382149eBa3441043c1c66972b4772963f5D43;
+    address aggregatorAddress = 0x59F1ec1f10bD7eD9B938431086bC1D9e233ECf41;
 
     constructor() ERC721("MR NFT", "MRNFT") {
         dataFeeds = new DataFeeds(aggregatorAddress);
